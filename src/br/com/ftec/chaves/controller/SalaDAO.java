@@ -8,10 +8,14 @@ package br.com.ftec.chaves.controller;
 import br.com.ftec.chaves.controller.ConnectionFactory;
 import br.com.ftec.chaves.model.Colaborador;
 import br.com.ftec.chaves.model.Sala;
+
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +36,7 @@ public class SalaDAO {
 
         Connection conn = null;
         PreparedStatement pstm = null;
+        ResultSet rset = null;
 
     
             conn =  ConnectionFactory.createConnectionToMySQL();
@@ -61,9 +66,37 @@ public class SalaDAO {
         sl.setTipo("tipo");
         sl.setCapacidade(rset.getInt("capacidade"));
         
-    }
-    
+    }   
     return sl;
+    
+    }
+    public List<Sala> listaSalas() throws ClassNotFoundException, SQLException{
+        String sqli = "Select * from sala";
+        Connection conn = null;
+        PreparedStatement pstm = null;
+    
+        ResultSet rset = null;
+    
+        ArrayList<Sala> listaSalas = new ArrayList<Sala> ();
+        
+        conn =  ConnectionFactory.createConnectionToMySQL();
+        pstm = conn.prepareStatement(sqli);
+        rset = pstm.executeQuery();
+        while(rset.next()){
+            Sala s = new Sala();
+            s.setId(rset.getInt("id"));        
+            s.setDescricao("descricao");
+            s.setSala("sala");
+            s.setTipo("tipo");
+            s.setCapacidade(rset.getInt("capacidade"));
+            listaSalas.add(s);
+            
+        
+    }
+            
+        return listaSalas;
+        
     }
     
-}
+    }
+    

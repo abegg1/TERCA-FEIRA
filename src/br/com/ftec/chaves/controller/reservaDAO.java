@@ -5,11 +5,15 @@
  */
 package br.com.ftec.chaves.controller;
 
+import br.com.ftec.chaves.model.Colaborador;
 import br.com.ftec.chaves.model.Reserva;
 import br.com.ftec.chaves.model.Sala;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -43,6 +47,38 @@ public class reservaDAO {
     
     
 }
+     public List<Reserva> listaReserva() throws ClassNotFoundException, SQLException{
+        String sqli = "Select * from reserva";
+        Connection conn = null;
+        PreparedStatement pstm = null;
+    
+        ResultSet rset = null;
+    
+        ArrayList<Reserva> listaReservas = new ArrayList<Reserva> ();
+        
+        conn =  ConnectionFactory.createConnectionToMySQL();
+        pstm = conn.prepareStatement(sqli);
+        rset = pstm.executeQuery();
+        while(rset.next()){
+            Reserva reserva = new Reserva();
+            Colaborador c = new Colaborador();
+            Sala s = new Sala();
+            c.setId(rset.getInt("id colaborador"));
+            reserva.setColaborador(c);
+                s.setId(rset.getInt("id sala"));
+                reserva.setSala(s);
+                reserva.setDia(rset.getString("dia"));
+                reserva.setTurno(rset.getString("turno"));
+                
+            listaReservas.add(reserva);
+        }  
+        
+    
+            
+        return listaReservas;
+        }
 }
+
+
     
 
