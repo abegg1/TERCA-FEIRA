@@ -7,7 +7,7 @@ package br.com.ftec.chaves.view;
 
 import br.com.ftec.chaves.controller.ColaboradorDAO;
 import br.com.ftec.chaves.controller.SalaDAO;
-import br.com.ftec.chaves.controller.reservaDAO;
+import br.com.ftec.chaves.controller.ReservaDAO;
 import br.com.ftec.chaves.model.Colaborador;
 import br.com.ftec.chaves.model.Reserva;
 import br.com.ftec.chaves.model.Sala;
@@ -233,7 +233,7 @@ public class Monitor extends javax.swing.JFrame {
             Colaborador colaborador = colaboradorDAO.buscarColaboradorPorCpf(txtResponsavel.getText());
             reserva.setColaborador(colaborador);
 
-            reservaDAO reservad = new reservaDAO();
+            ReservaDAO reservad = new ReservaDAO();
             reservad.salvar(reserva);
 
         } catch (ClassNotFoundException ex) {

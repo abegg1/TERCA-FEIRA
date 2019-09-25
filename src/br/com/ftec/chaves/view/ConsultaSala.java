@@ -5,6 +5,13 @@
  */
 package br.com.ftec.chaves.view;
 
+import br.com.ftec.chaves.controller.ReservaDAO;
+import br.com.ftec.chaves.model.Reserva;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author bernadete.abegg
@@ -35,9 +42,10 @@ public class ConsultaSala extends javax.swing.JFrame {
         tfResponsavel = new javax.swing.JTextField();
         tfTurno = new javax.swing.JTextField();
         tfData = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tbseg = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jPasswordField1 = new javax.swing.JPasswordField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbReserva = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,23 +75,6 @@ public class ConsultaSala extends javax.swing.JFrame {
             }
         });
 
-        tbseg.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {"Manha", null, null, null, null, null, null, null},
-                {"Tarde", null, null, null, null, null, null, null},
-                {"Noite", null, null, null, null, null, null, null},
-                {"Manha", null, null, null, null, null, null, null},
-                {"Tarde", null, null, null, null, null, null, null},
-                {"Noite", null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "", "Seg", "Ter", "Quar", "Qui", "Sex", "Sab", ""
-            }
-        ));
-        jScrollPane1.setViewportView(tbseg);
-
         jButton1.setText("Reservar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,14 +82,29 @@ public class ConsultaSala extends javax.swing.JFrame {
             }
         });
 
+        jPasswordField1.setText("jPasswordField1");
+
+        tbReserva.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tbReserva);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
@@ -110,10 +116,17 @@ public class ConsultaSala extends javax.swing.JFrame {
                             .addComponent(tfSala, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfResponsavel, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfData))
-                        .addGap(88, 88, 88)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(90, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(88, 88, 88)
+                                .addComponent(jButton1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(65, 65, 65)
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,13 +148,18 @@ public class ConsultaSala extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(tfTurno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(tfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(tfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(45, 45, 45)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(98, Short.MAX_VALUE))
         );
 
         pack();
@@ -162,8 +180,39 @@ public class ConsultaSala extends javax.swing.JFrame {
     private void tfDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfDataActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfDataActionPerformed
-
+    private void montaTabela(){
+        DefaultTableModel dftm = (DefaultTableModel) tbReserva.getModel();
+        dftm.setNumRows(0);
+        tbReserva.getColumnModel().getColumn(0).setPreferredWidth(20);
+        tbReserva.getColumnModel().getColumn(0).setHeaderValue("Colaborador");
+        tbReserva.getColumnModel().getColumn(1).setPreferredWidth(20);
+        tbReserva.getColumnModel().getColumn(1).setHeaderValue("Dia");
+        tbReserva.getColumnModel().getColumn(2).setPreferredWidth(20);
+        tbReserva.getColumnModel().getColumn(2).setHeaderValue("Sala");
+        tbReserva.getColumnModel().getColumn(3).setPreferredWidth(20);
+        tbReserva.getColumnModel().getColumn(3).setHeaderValue("Turno");
+        ReservaDAO dao= new ReservaDAO();
+        try {
+            for(Reserva r: dao.listaReserva()){
+                dftm.addRow(new Object[]
+                {
+                    r.getColaborador().getId(),
+                    r.getDia(),
+                    r.getSala().getId(),
+                    r.getTurno(),
+                }
+                );
+                
+                 
+            }   } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ConsultaSala.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsultaSala.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
+     * @param args the command line arguments
+     */    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -194,7 +243,10 @@ public class ConsultaSala extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsultaSala().setVisible(true);
+                ConsultaSala consultaSala = new ConsultaSala();
+                consultaSala.montaTabela();
+                consultaSala.setVisible(true);
+                
             }
         });
     }
@@ -205,8 +257,9 @@ public class ConsultaSala extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tbseg;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tbReserva;
     private javax.swing.JTextField tfData;
     private javax.swing.JTextField tfResponsavel;
     private javax.swing.JTextField tfSala;
