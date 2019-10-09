@@ -150,9 +150,9 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        RetiradaChaves frameRetirada = new RetiradaChaves();
-        frameRetirada.setVisible(true);
-        this.setVisible(false);
+     //   RetiradaChaves frameRetirada = new RetiradaChaves();
+     //   frameRetirada.setVisible(true);
+      //  this.setVisible(false);
         
     }//GEN-LAST:event_btnLoginActionPerformed
 

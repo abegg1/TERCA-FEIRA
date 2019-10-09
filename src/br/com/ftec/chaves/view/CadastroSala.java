@@ -49,7 +49,9 @@ public class CadastroSala extends javax.swing.JFrame {
         btnsalvar = new javax.swing.JButton();
         btncancelar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbConsultaSala = new javax.swing.JTable();
+        tbtabela = new javax.swing.JTable();
+        btnbotao = new javax.swing.JButton();
+        tfid = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 51, 255));
@@ -95,7 +97,7 @@ public class CadastroSala extends javax.swing.JFrame {
         btncancelar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btncancelar.setText("Cancelar");
 
-        tbConsultaSala.setModel(new javax.swing.table.DefaultTableModel(
+        tbtabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -106,7 +108,27 @@ public class CadastroSala extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tbConsultaSala);
+        tbtabela.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbtabelaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbtabela);
+
+        btnbotao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnbotao.setText("Excluir");
+        btnbotao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbotaoActionPerformed(evt);
+            }
+        });
+
+        tfid.setText("ID");
+        tfid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfidActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -114,8 +136,19 @@ public class CadastroSala extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(39, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnbotao)
+                                .addGap(261, 261, 261))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(tfid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(180, 180, 180))))))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -137,7 +170,11 @@ public class CadastroSala extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(267, Short.MAX_VALUE)
+                .addContainerGap(138, Short.MAX_VALUE)
+                .addComponent(tfid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(btnbotao)
+                .addGap(46, 46, 46)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,23 +253,64 @@ public class CadastroSala extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"Operacao cancelada");
         Principal p = new Principal();
         p.setVisible(true);
-                }else{           
+                }else{
+        }
     }//GEN-LAST:event_btnsalvarActionPerformed
-}
+
     private void tfsalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfsalaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfsalaActionPerformed
-private void montaTabela(){
-        DefaultTableModel dftm = (DefaultTableModel) tbConsultaSala.getModel();
+
+    private void tbtabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbtabelaMouseClicked
+        // TODO add your handling code here:
+        
+        int linha = tbtabela.getSelectedRow();
+        String valor = (String) tbtabela.getValueAt(linha,0);
+        System.err.println("valor");
+        SalaDAO salaDAO = new SalaDAO();
+        Sala sala1;
+        try {
+            sala1 = salaDAO.buscaSalaPorSala(valor);
+              tfcapac.setText(String.valueOf(sala1.getCapacidade()));
+        tfdescr.setText(sala1.getDescricao());
+        tfsala.setText(sala1.getSala());        
+        tftipo.setText(sala1.getTipo());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+      
+    }//GEN-LAST:event_tbtabelaMouseClicked
+
+    private void btnbotaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbotaoActionPerformed
+        // TODO add your handling code here:
+        
+        SalaDAO dao = new SalaDAO();
+        dao.excluirSala(id);
+        
+    }//GEN-LAST:event_btnbotaoActionPerformed
+
+    private void tfidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfidActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tfidActionPerformed
+
+   
+            
+    
+    private void montaTabela(){
+        DefaultTableModel dftm = (DefaultTableModel) tbtabela.getModel();
         dftm.setNumRows(0);
-        tbConsultaSala.getColumnModel().getColumn(0).setPreferredWidth(20);
-        tbConsultaSala.getColumnModel().getColumn(0).setHeaderValue("Sala");
-        tbConsultaSala.getColumnModel().getColumn(1).setPreferredWidth(20);
-        tbConsultaSala.getColumnModel().getColumn(1).setHeaderValue("Capacidade");
-        tbConsultaSala.getColumnModel().getColumn(2).setPreferredWidth(20);
-        tbConsultaSala.getColumnModel().getColumn(2).setHeaderValue("Tipo");
-        tbConsultaSala.getColumnModel().getColumn(3).setPreferredWidth(20);
-        tbConsultaSala.getColumnModel().getColumn(3).setHeaderValue("Descicao");
+        tbtabela.getColumnModel().getColumn(0).setPreferredWidth(20);
+        tbtabela.getColumnModel().getColumn(0).setHeaderValue("Sala");
+        tbtabela.getColumnModel().getColumn(1).setPreferredWidth(20);
+        tbtabela.getColumnModel().getColumn(1).setHeaderValue("Capacidade");
+        tbtabela.getColumnModel().getColumn(2).setPreferredWidth(20);
+        tbtabela.getColumnModel().getColumn(2).setHeaderValue("Tipo");
+        tbtabela.getColumnModel().getColumn(3).setPreferredWidth(20);
+        tbtabela.getColumnModel().getColumn(3).setHeaderValue("Descicao");
         SalaDAO dao= new SalaDAO();
         try {
             for(Sala r: dao.listaSalas()){
@@ -247,9 +325,9 @@ private void montaTabela(){
                 
                  
             }   } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ConsultaSala.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Reservas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultaSala.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Reservas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
@@ -291,6 +369,7 @@ private void montaTabela(){
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnbotao;
     private javax.swing.JButton btncancelar;
     private javax.swing.JButton btnsalvar;
     private javax.swing.JPanel jPanel1;
@@ -299,9 +378,10 @@ private void montaTabela(){
     private javax.swing.JLabel lbdescr;
     private javax.swing.JLabel lbsala;
     private javax.swing.JLabel lbtipo;
-    private javax.swing.JTable tbConsultaSala;
+    private javax.swing.JTable tbtabela;
     private javax.swing.JTextField tfcapac;
     private javax.swing.JTextField tfdescr;
+    private javax.swing.JTextField tfid;
     private javax.swing.JTextField tfsala;
     private javax.swing.JTextField tftipo;
     // End of variables declaration//GEN-END:variables

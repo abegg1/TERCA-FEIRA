@@ -5,11 +5,23 @@
  */
 package br.com.ftec.chaves.view;
 
+import br.com.ftec.chaves.controller.ColaboradorDAO;
+import br.com.ftec.chaves.controller.SalaDAO;
+import br.com.ftec.chaves.model.Colaborador;
+import br.com.ftec.chaves.model.Sala;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author bernadete.abegg
  */
 public class CadastroColaborador extends javax.swing.JFrame {
+    
+    private int id;
 
     /**
      * Creates new form tela_2
@@ -38,10 +50,12 @@ public class CadastroColaborador extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         tfnome = new javax.swing.JTextField();
         tfcpf = new javax.swing.JTextField();
-        tffone = new javax.swing.JTextField();
-        tfsenha = new javax.swing.JPasswordField();
+        tftelefone = new javax.swing.JTextField();
         tfemail = new javax.swing.JTextField();
         btnsalvar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbCadastroColaborador = new javax.swing.JTable();
+        tfsenha = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,33 +98,54 @@ public class CadastroColaborador extends javax.swing.JFrame {
             }
         });
 
-        tffone.addActionListener(new java.awt.event.ActionListener() {
+        tftelefone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tffoneActionPerformed(evt);
+                tftelefoneActionPerformed(evt);
             }
         });
 
-        tfsenha.setText("jPasswordField1");
-
         btnsalvar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnsalvar.setText("Salvar");
+        btnsalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsalvarActionPerformed(evt);
+            }
+        });
+
+        tbCadastroColaborador.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tbCadastroColaborador);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addGap(68, 68, 68))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(btnsalvar)
-                .addGap(150, 150, 150)
-                .addComponent(btncancelar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(tfsenha, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(407, 407, 407)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(btnsalvar)
+                        .addGap(28, 28, 28)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(btncancelar)))
+                .addContainerGap(279, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(10, 10, 10)
@@ -122,25 +157,31 @@ public class CadastroColaborador extends javax.swing.JFrame {
                         .addComponent(lbemail))
                     .addGap(30, 30, 30)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(tfsenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(tfnome)
                         .addComponent(tfcpf)
-                        .addComponent(tffone)
+                        .addComponent(tftelefone)
                         .addComponent(tfemail, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
                     .addGap(369, 369, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(210, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnsalvar)
-                    .addComponent(btncancelar))
-                .addGap(58, 58, 58)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 147, Short.MAX_VALUE))
-                .addGap(27, 27, 27))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addComponent(tfsenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(22, 22, 22)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(74, 74, 74)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnsalvar)
+                        .addComponent(btncancelar)))
+                .addContainerGap(148, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -154,12 +195,10 @@ public class CadastroColaborador extends javax.swing.JFrame {
                                 .addComponent(lbcpf)
                                 .addComponent(tfcpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(18, 18, 18)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lbsenha)
-                                .addComponent(tfsenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lbsenha)
                             .addGap(18, 18, 18)
                             .addComponent(lbfone))
-                        .addComponent(tffone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(tftelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(18, 18, 18)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbemail)
@@ -180,7 +219,7 @@ public class CadastroColaborador extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -194,10 +233,74 @@ public class CadastroColaborador extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfnomeActionPerformed
 
-    private void tffoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tffoneActionPerformed
+    private void tftelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tftelefoneActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tffoneActionPerformed
+    }//GEN-LAST:event_tftelefoneActionPerformed
 
+    private void btnsalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsalvarActionPerformed
+        // TODO add your handling code here:
+       
+        
+        Colaborador colaborador = new Colaborador();
+        colaborador.setNome(tfnome.getText());
+        colaborador.setCpf(tfcpf.getText());
+        colaborador.setSenha(tfsenha.getText());
+         colaborador.setTelefone(tftelefone.getText());
+          colaborador.setEmail(tfemail.getText());
+        
+        String mensagem =  "colaborador:"+colaborador.getNome( )+
+        "\n cpf:"+colaborador.getCpf()+
+        "\n senha:"+colaborador.getSenha( )+
+        "\n telefone:"+colaborador.getTelefone()+
+        "\n email:"+colaborador.getEmail()+      
+        "\n \n Salvo com Sucesso!";
+        int confirma = JOptionPane.showConfirmDialog(this,"Deseja Salvar os"+ 
+                "dados da seguinte sala \n"+mensagem);
+        if(confirma==JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(this,"Salvo com Sucesso");
+            ColaboradorDAO colaboradorDAO= new ColaboradorDAO();
+            colaboradorDAO.salvar(colaborador);
+            
+        }else if(confirma == JOptionPane.NO_OPTION){
+            JOptionPane.showMessageDialog(this,"Operacao cancelada");
+        Principal p = new Principal();
+        p.setVisible(true);
+                }else{
+        }
+                
+        
+    }//GEN-LAST:event_btnsalvarActionPerformed
+private void montaTabela(){
+        DefaultTableModel dftm = (DefaultTableModel) tbCadastroColaborador.getModel();
+        dftm.setNumRows(0);
+        tbCadastroColaborador.getColumnModel().getColumn(0).setPreferredWidth(20);
+        tbCadastroColaborador.getColumnModel().getColumn(0).setHeaderValue("nome");
+        tbCadastroColaborador.getColumnModel().getColumn(1).setPreferredWidth(20);
+        tbCadastroColaborador.getColumnModel().getColumn(1).setHeaderValue("cpf");
+        tbCadastroColaborador.getColumnModel().getColumn(2).setPreferredWidth(20);
+        tbCadastroColaborador.getColumnModel().getColumn(2).setHeaderValue("telefone");
+        tbCadastroColaborador.getColumnModel().getColumn(3).setPreferredWidth(20);
+        tbCadastroColaborador.getColumnModel().getColumn(3).setHeaderValue("email");
+        ColaboradorDAO dao= new ColaboradorDAO();
+        try {
+            for( Colaborador r: dao.listaColaborador()){
+                dftm.addRow(new Object[]
+                {
+                    r.getNome(),
+                    r.getCpf(),
+                    r.getSenha(),
+                    r.getTelefone(),
+                    r.getEmail(),
+                }
+                );
+                
+                 
+            }   } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CadastroColaborador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CadastroColaborador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -229,10 +332,14 @@ public class CadastroColaborador extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastroColaborador().setVisible(true);
+                
+                CadastroColaborador c = new CadastroColaborador();
+                c.montaTabela();
+                c.setVisible(true);
             }
         });
     }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btncancelar;
@@ -240,15 +347,17 @@ public class CadastroColaborador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbcpf;
     private javax.swing.JLabel lbemail;
     private javax.swing.JLabel lbfone;
     private javax.swing.JLabel lbnome;
     private javax.swing.JLabel lbsenha;
+    private javax.swing.JTable tbCadastroColaborador;
     private javax.swing.JTextField tfcpf;
     private javax.swing.JTextField tfemail;
-    private javax.swing.JTextField tffone;
     private javax.swing.JTextField tfnome;
-    private javax.swing.JPasswordField tfsenha;
+    private javax.swing.JTextField tfsenha;
+    private javax.swing.JTextField tftelefone;
     // End of variables declaration//GEN-END:variables
 }

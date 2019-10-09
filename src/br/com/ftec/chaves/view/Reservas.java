@@ -5,23 +5,33 @@
  */
 package br.com.ftec.chaves.view;
 
+import br.com.ftec.chaves.controller.ColaboradorDAO;
 import br.com.ftec.chaves.controller.ReservaDAO;
+import br.com.ftec.chaves.controller.SalaDAO;
+import br.com.ftec.chaves.model.Colaborador;
 import br.com.ftec.chaves.model.Reserva;
+import br.com.ftec.chaves.model.Sala;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author bernadete.abegg
  */
-public class ConsultaSala extends javax.swing.JFrame {
+public class Reservas extends javax.swing.JFrame {
+    
+    ArrayList<Colaborador> colaborador;
+    ArrayList<Sala> sala;
 
     /**
      * Creates new form tela_4
      */
-    public ConsultaSala() {
+    public Reservas() {
         initComponents();
     }
 
@@ -38,14 +48,14 @@ public class ConsultaSala extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        tfSala = new javax.swing.JTextField();
-        tfResponsavel = new javax.swing.JTextField();
-        tfTurno = new javax.swing.JTextField();
-        tfData = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jPasswordField1 = new javax.swing.JPasswordField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbReserva = new javax.swing.JTable();
+        cbsala = new javax.swing.JComboBox<>();
+        cbcolaborador = new javax.swing.JComboBox<>();
+        cbturno = new javax.swing.JComboBox<>();
+        cbdata = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,24 +66,6 @@ public class ConsultaSala extends javax.swing.JFrame {
         jLabel3.setText("Turno");
 
         jLabel4.setText("Data");
-
-        tfSala.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfSalaActionPerformed(evt);
-            }
-        });
-
-        tfTurno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfTurnoActionPerformed(evt);
-            }
-        });
-
-        tfData.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfDataActionPerformed(evt);
-            }
-        });
 
         jButton1.setText("Reservar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -97,6 +89,24 @@ public class ConsultaSala extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tbReserva);
 
+        cbsala.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbsala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbsalaActionPerformed(evt);
+            }
+        });
+
+        cbcolaborador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbturno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Manhã", "Tarde", "Noite" }));
+        cbturno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbturnoActionPerformed(evt);
+            }
+        });
+
+        cbdata.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sabado", "Domingo", " " }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,18 +120,19 @@ public class ConsultaSala extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
-                        .addGap(62, 62, 62)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(tfTurno, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-                            .addComponent(tfSala, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfResponsavel, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfData))
+                        .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(88, 88, 88)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cbcolaborador, 0, 128, Short.MAX_VALUE)
+                                    .addComponent(cbsala, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(91, 91, 91)
                                 .addComponent(jButton1))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(65, 65, 65)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(cbturno, 0, 128, Short.MAX_VALUE)
+                                    .addComponent(cbdata, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(68, 68, 68)
                                 .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -133,33 +144,35 @@ public class ConsultaSala extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(tfSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbsala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(tfResponsavel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbcolaborador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addComponent(jButton1)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(tfTurno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(tfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(45, 45, 45)
+                        .addComponent(cbturno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbdata, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(36, 36, 36)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 
         pack();
@@ -167,19 +180,76 @@ public class ConsultaSala extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+         
+        Reserva reserva = new Reserva();
+        reserva.setSala(cbsala.);
+        reserva.setresponsavel(Integer.valueOf(tfcapac.getText()));
+        reserva.setDescricao(tfdescr.getText());
+        reserva.setTipo(tftipo.getText());
+        String mensagem = "sala:"+sala.getSala( )+
+        "\n capacidade:"+sala.getCapacidade()+
+        "\n tipo:"+sala.getTipo( )+
+        "\n OBS:"+sala.getDescricao()+
+        "\n \n Salvo com Sucesso!";
+        int confirma = JOptionPane.showConfirmDialog(this,"Deseja Salvar os"+ 
+                "dados da seguinte sala \n"+mensagem);
+        if(confirma==JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(this,"Salvo com Sucesso");
+            SalaDAO salaDAO = new SalaDAO();
+            try {
+                salaDAO.salvar(sala);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }else if(confirma == JOptionPane.NO_OPTION){
+            JOptionPane.showMessageDialog(this,"Operacao cancelada");
+        Principal p = new Principal();
+        p.setVisible(true);
+                }else{
+        }
+    }                  
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void tfSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfSalaActionPerformed
+    private void cbsalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbsalaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfSalaActionPerformed
+    }//GEN-LAST:event_cbsalaActionPerformed
 
-    private void tfTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfTurnoActionPerformed
+    private void cbturnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbturnoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfTurnoActionPerformed
-
-    private void tfDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfDataActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfDataActionPerformed
+    }//GEN-LAST:event_cbturnoActionPerformed
+  
+    
+    private void montarComboBoxColaborador() {
+        ColaboradorDAO colaboradorDAO= new ColaboradorDAO();
+        
+        try {
+            colaborador = (ArrayList<Colaborador>) colaboradorDAO.listaColaborador();
+        } catch (Exception ex) {
+            Logger.getLogger(Reservas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultComboBoxModel boxModel =
+                new DefaultComboBoxModel(colaborador.toArray());
+        cbcolaborador.setModel(boxModel);
+        
+    }
+   
+    private void montarComboBoxSala() {
+        SalaDAO saladao= new SalaDAO();
+        
+        try {
+            sala = (ArrayList<Sala>) saladao.listaSalas();
+        } catch (Exception ex) {
+            Logger.getLogger(Reservas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultComboBoxModel boxModel =
+                new DefaultComboBoxModel(sala.toArray());
+        cbsala.setModel(boxModel);
+        
+    }
     private void montaTabela(){
         DefaultTableModel dftm = (DefaultTableModel) tbReserva.getModel();
         dftm.setNumRows(0);
@@ -205,9 +275,9 @@ public class ConsultaSala extends javax.swing.JFrame {
                 
                  
             }   } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ConsultaSala.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Reservas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultaSala.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Reservas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
@@ -229,22 +299,26 @@ public class ConsultaSala extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultaSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Reservas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultaSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Reservas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultaSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Reservas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultaSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Reservas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ConsultaSala consultaSala = new ConsultaSala();
-                consultaSala.montaTabela();
+                Reservas consultaSala = new Reservas();
+                consultaSala.montaTabela(); 
+                consultaSala.montarComboBoxColaborador();
+                consultaSala.montarComboBoxSala();
                 consultaSala.setVisible(true);
                 
             }
@@ -252,6 +326,10 @@ public class ConsultaSala extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cbcolaborador;
+    private javax.swing.JComboBox<String> cbdata;
+    private javax.swing.JComboBox<String> cbsala;
+    private javax.swing.JComboBox<String> cbturno;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -260,9 +338,5 @@ public class ConsultaSala extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tbReserva;
-    private javax.swing.JTextField tfData;
-    private javax.swing.JTextField tfResponsavel;
-    private javax.swing.JTextField tfSala;
-    private javax.swing.JTextField tfTurno;
     // End of variables declaration//GEN-END:variables
 }
