@@ -48,8 +48,26 @@ public class SalaDAO {
             pstm.execute(); // executa o sql
 
     }
+     public void excluirSala(int id) throws ClassNotFoundException, SQLException {
+
+        //criação do SQL para salvar valores da sala no banco
+        //cada ? representa os valores que serão colocados para cada campo
+        //em ordem.
+        String sql = "delete from sala where id='"+id+"'";
+
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rset = null;
+
+    
+            conn =  ConnectionFactory.createConnectionToMySQL();
+            pstm = conn.prepareStatement(sql);
+            pstm.executeUpdate();
+   
+    }
+    
     public Sala  buscaSalaPorSala(String sala) throws ClassNotFoundException, SQLException{
-    String sql = "Select * FROM SALA"+" WHERE SALA = "+sala;
+    String sql = "Select * FROM SALA"+" WHERE SALA = '"+sala+"'";
     Connection conn = null;
     PreparedStatement pstm = null;
     
@@ -85,18 +103,18 @@ public class SalaDAO {
         while(rset.next()){
             Sala s = new Sala();
             s.setId(rset.getInt("id"));        
-            s.setDescricao("descricao");
-            s.setSala("sala");
-            s.setTipo("tipo");
+            s.setDescricao(rset.getString("descricao"));
+            s.setSala(rset.getString("sala"));
+            s.setTipo(rset.getString("tipo"));
             s.setCapacidade(rset.getInt("capacidade"));
             listaSalas.add(s);
             
-        
-    }
+            
+        }
             
         return listaSalas;
         
     }
     
-    }
+}
     

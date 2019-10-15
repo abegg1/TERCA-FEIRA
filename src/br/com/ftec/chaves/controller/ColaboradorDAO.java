@@ -66,6 +66,38 @@ public class ColaboradorDAO {
         }   
         
         return colaborador;
+    }   
+   
+   public Colaborador buscarColaboradorPorNome(String nome){
+        
+        String sqlInsercaoSala = "SELECT * FROM colaborador WHERE nome = ?";
+
+        Colaborador colaborador = new Colaborador();
+        
+        Connection conexaoBancoDados = null;
+        PreparedStatement parametrosInsersao = null;
+        ResultSet resultado = null;
+        
+        try {
+            conexaoBancoDados = ConnectionFactory.createConnectionToMySQL();
+            parametrosInsersao = conexaoBancoDados.prepareStatement(sqlInsercaoSala);
+            parametrosInsersao.setString(1,nome);
+            resultado = parametrosInsersao.executeQuery();   
+            while(resultado.next()){
+                colaborador.setId(resultado.getInt("id"));
+                colaborador.setNome(resultado.getString("nome"));
+                colaborador.setSenha(resultado.getString("senha"));
+                colaborador.setCpf(resultado.getString("cpf"));
+                colaborador.setEmail(resultado.getString("email"));
+                colaborador.setTelefone(resultado.getString("telefone"));
+            } 
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SalaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SalaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+        
+        return colaborador;
     }    
      public List<Colaborador> listaColaborador() throws ClassNotFoundException, SQLException{
         String sqli = "Select * from colaborador";

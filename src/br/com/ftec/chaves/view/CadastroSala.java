@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
  * @author bernadete.abegg
  */
 public class CadastroSala extends javax.swing.JFrame {
-
+ int id;
     /**
      * Creates new form tela_3
      */
@@ -255,6 +255,18 @@ public class CadastroSala extends javax.swing.JFrame {
         p.setVisible(true);
                 }else{
         }
+        montaTabela();
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }//GEN-LAST:event_btnsalvarActionPerformed
 
     private void tfsalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfsalaActionPerformed
@@ -266,15 +278,22 @@ public class CadastroSala extends javax.swing.JFrame {
         
         int linha = tbtabela.getSelectedRow();
         String valor = (String) tbtabela.getValueAt(linha,0);
-        System.err.println("valor");
         SalaDAO salaDAO = new SalaDAO();
-        Sala sala1;
+
         try {
-            sala1 = salaDAO.buscaSalaPorSala(valor);
+            
+            Sala sala1 = salaDAO.buscaSalaPorSala(valor);
+            System.out.println(sala1.getCapacidade());
+
               tfcapac.setText(String.valueOf(sala1.getCapacidade()));
-        tfdescr.setText(sala1.getDescricao());
-        tfsala.setText(sala1.getSala());        
-        tftipo.setText(sala1.getTipo());
+              tfcapac.setEnabled(false);
+              tfdescr.setText(sala1.getDescricao());
+              tfdescr.setEnabled(false);
+              tfsala.setText(sala1.getSala()); 
+              tfsala.setEditable(false);
+              tftipo.setText(sala1.getTipo());
+              tftipo.setEnabled(false);    
+              id = sala1.getId();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -288,8 +307,24 @@ public class CadastroSala extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         SalaDAO dao = new SalaDAO();
-        dao.excluirSala(id);
-        
+     try {
+         dao.excluirSala(id);
+     } catch (ClassNotFoundException ex) {
+         Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+     } catch (SQLException ex) {
+         Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+     }
+        tfcapac.setText("");
+        tfdescr.setText("");
+        tfsala.setText("");
+        tftipo.setText("");    
+     
+     
+        tfcapac.setEnabled(true);
+        tfdescr.setEnabled(true);
+        tfsala.setEditable(true);
+        tftipo.setEnabled(true);    
+       montaTabela(); 
     }//GEN-LAST:event_btnbotaoActionPerformed
 
     private void tfidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfidActionPerformed
@@ -301,6 +336,7 @@ public class CadastroSala extends javax.swing.JFrame {
             
     
     private void montaTabela(){
+        
         DefaultTableModel dftm = (DefaultTableModel) tbtabela.getModel();
         dftm.setNumRows(0);
         tbtabela.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -311,9 +347,9 @@ public class CadastroSala extends javax.swing.JFrame {
         tbtabela.getColumnModel().getColumn(2).setHeaderValue("Tipo");
         tbtabela.getColumnModel().getColumn(3).setPreferredWidth(20);
         tbtabela.getColumnModel().getColumn(3).setHeaderValue("Descicao");
-        SalaDAO dao= new SalaDAO();
+        SalaDAO dao = new SalaDAO();
         try {
-            for(Sala r: dao.listaSalas()){
+            for(Sala r : dao.listaSalas()){
                 dftm.addRow(new Object[]
                 {
                     r.getSala(),

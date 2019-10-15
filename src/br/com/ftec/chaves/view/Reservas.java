@@ -179,38 +179,46 @@ public class Reservas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-         
-        Reserva reserva = new Reserva();
-        reserva.setSala(cbsala.);
-        reserva.setresponsavel(Integer.valueOf(tfcapac.getText()));
-        reserva.setDescricao(tfdescr.getText());
-        reserva.setTipo(tftipo.getText());
-        String mensagem = "sala:"+sala.getSala( )+
-        "\n capacidade:"+sala.getCapacidade()+
-        "\n tipo:"+sala.getTipo( )+
-        "\n OBS:"+sala.getDescricao()+
-        "\n \n Salvo com Sucesso!";
-        int confirma = JOptionPane.showConfirmDialog(this,"Deseja Salvar os"+ 
-                "dados da seguinte sala \n"+mensagem);
-        if(confirma==JOptionPane.YES_OPTION){
-            JOptionPane.showMessageDialog(this,"Salvo com Sucesso");
-            SalaDAO salaDAO = new SalaDAO();
-            try {
-                salaDAO.salvar(sala);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            // TODO add your handling code here:
+            SalaDAO saladao = new SalaDAO();
+            ColaboradorDAO colaboradorDAO = new ColaboradorDAO();
+            Reserva reserva = new Reserva();
+            reserva.setSala(saladao.buscaSalaPorSala(cbsala.getSelectedItem().toString()));
+            reserva.setColaborador(colaboradorDAO.buscarColaboradorPorNome(cbcolaborador.getSelectedItem().toString()));
+            reserva.setTurno(cbturno.getSelectedItem().toString());
+            reserva.setDia(cbturno.getSelectedItem().toString());
+            Sala sala = reserva.getSala();
+            String mensagem = "sala:"+sala.getSala( )+
+                    "\n capacidade:"+sala.getCapacidade()+
+                    "\n tipo:"+sala.getTipo( )+
+                    "\n OBS:"+sala.getDescricao()+
+                    "\n \n Salvo com Sucesso!";
+            int confirma = JOptionPane.showConfirmDialog(this,"Deseja Salvar os"+
+                    "dados da seguinte sala \n"+mensagem);
+            if(confirma==JOptionPane.YES_OPTION){
+                JOptionPane.showMessageDialog(this,"Salvo com Sucesso");
+                SalaDAO salaDAO = new SalaDAO();
+                try {
+                    salaDAO.salvar(sala);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }else if(confirma == JOptionPane.NO_OPTION){
+                JOptionPane.showMessageDialog(this,"Operacao cancelada");
+                Principal p = new Principal();
+                p.setVisible(true);
+            }else{
             }
-            
-        }else if(confirma == JOptionPane.NO_OPTION){
-            JOptionPane.showMessageDialog(this,"Operacao cancelada");
-        Principal p = new Principal();
-        p.setVisible(true);
-                }else{
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Reservas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Reservas.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }                  
+                      
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -266,9 +274,9 @@ public class Reservas extends javax.swing.JFrame {
             for(Reserva r: dao.listaReserva()){
                 dftm.addRow(new Object[]
                 {
-                    r.getColaborador().getId(),
+                    r.getColaborador().getNome(),
                     r.getDia(),
-                    r.getSala().getId(),
+                    r.getSala().getSala(),
                     r.getTurno(),
                 }
                 );
