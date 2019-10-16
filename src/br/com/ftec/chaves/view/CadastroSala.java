@@ -241,6 +241,8 @@ public class CadastroSala extends javax.swing.JFrame {
         if(confirma==JOptionPane.YES_OPTION){
             JOptionPane.showMessageDialog(this,"Salvo com Sucesso");
             SalaDAO salaDAO = new SalaDAO();
+            limpaTabela();
+           
             try {
                 salaDAO.salvar(sala);
             } catch (ClassNotFoundException ex) {
@@ -255,13 +257,8 @@ public class CadastroSala extends javax.swing.JFrame {
         p.setVisible(true);
                 }else{
         }
-        montaTabela();
-        
-        
-        
-        
-        
-        
+        montaTabela();         
+            
         
         
         
@@ -314,19 +311,24 @@ public class CadastroSala extends javax.swing.JFrame {
      } catch (SQLException ex) {
          Logger.getLogger(CadastroSala.class.getName()).log(Level.SEVERE, null, ex);
      }
-        tfcapac.setText("");
-        tfdescr.setText("");
-        tfsala.setText("");
-        tftipo.setText("");    
      
+       limpaTabela ();    
      
         tfcapac.setEnabled(true);
         tfdescr.setEnabled(true);
         tfsala.setEditable(true);
         tftipo.setEnabled(true);    
-       montaTabela(); 
+        montaTabela(); 
+       
     }//GEN-LAST:event_btnbotaoActionPerformed
-
+private void limpaTabela(){
+        tfcapac.setText("");
+        tfdescr.setText("");
+        tfsala.setText("");
+        tftipo.setText("");    
+     
+    
+}
     private void tfidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfidActionPerformed
         // TODO add your handling code here:
         
